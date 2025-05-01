@@ -2,7 +2,7 @@ import glob
 import numpy as np
 
 import sys
-sys.path.append(/users/thunter/AIV/science/analysis_scripts)
+sys.path.append("/users/thunter/AIV/science/analysis_scripts")
 
 import analysisUtils as au
 
