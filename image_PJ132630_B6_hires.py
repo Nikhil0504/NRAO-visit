@@ -10,7 +10,7 @@ zsource=2.9507
 parallel=False
 
 # get all MSs from directory
-vis=glob.glob("*.ms.split.cal")
+vis=glob.glob("../*.ms.split.cal")
 
 # get properties from first vis
 # field
