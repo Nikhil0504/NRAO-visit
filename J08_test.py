@@ -6,57 +6,61 @@ def getlistobs(uv_ms='', outfile=''):
       return
 
 
+
 InspectPLOTMS = False
 if InspectPLOTMS:
 
-      plotms(vis='cal.ms',
+      plotms(vis=vis_dir,
             xaxis='freq',
             yaxis='amp',
-            field=fieldname,
+            field=0,
             avgtime='1e8',
             avgscan=True,
-            iteraxis='spw')
+            iteraxis='spw',
+            showgui=False,
+            plotfile='test_plotms.png')
 
-      plotms(vis='cal.ms',
-            # spw='37',
-            xaxis='uvwave',
-            yaxis='amp',
-            field=fieldname,
-            avgtime='1e9',avgscan=True,
-            avgchannel='1e8',
-            coloraxis='observation')
+#       plotms(vis=vis_dir,
+#             # spw='37',
+#             xaxis='uvwave',
+#             yaxis='amp',
+#            # field=fieldname,
+#             avgtime='1e9',avgscan=True,
+#             avgchannel='1e8',
+#             coloraxis='observation')
           
 
-root = '/path/to/data'
-
+root = '/lustre/cv/observers/cv-14744/data/'
+highrespath = '2023.1.00299.S_uid___A001_X3628_X184/2023.1.00299.S/science_goal.uid___A001_X3628_X182/group.uid___A001_X3628_X183/member.uid___A001_X3628_X184/calibrated/'
+lowrespath = '2023.1.00299.S_uid___A001_X3628_X186/2023.1.00299.S/science_goal.uid___A001_X3628_X182/group.uid___A001_X3628_X183/member.uid___A001_X3628_X186/calibrated/'
 # Using: 29.) casapy-6.6.5
 ''' All Observations for 
 '''
 
-sourcenames = ['x', #0
-                           'x', #1
-                           'x',     #2
-                           'x',   #3
-                           'xx',   #4
-                           'xx',   #5
-                           'xx',   #6
-                           'xx',   #7
-                           'xx']   #8
-fieldnames = ['x-58', 
-                           'x-59', #1   
-                           'x-62',          #2
-                           'xx']
+sourcenames = ['PJ0846']   #8
+fieldnames = ['PJ0846']
 
 #For two calibrated MSes 
-cal_ms = [root+'/xxxxx/'+'uid___A002_X12021d4_X4610.ms.split.cal',  root+'/xxxxxx/'+'uid___A002_X12021d4_Xafd8.ms.split.cal']
+cal_ms_highres = [root+highrespath+'uid___A002_X10e6d25_X50ff.ms.split.cal/',  
+          root+highrespath+'uid___A002_X10e6d25_X5d65.ms.split.cal/',
+          root+highrespath+'uid___A002_X10e9b60_X68dc.ms.split.cal/',
+          root+highrespath+'uid___A002_X10e9b60_Xe6a1.ms.split.cal/']
+
+
+#For two calibrated MSes 
+cal_ms_lowres = [root+lowrespath+'uid___A002_X112077c_X3f163.ms.split.cal/',  
+          root+lowrespath+'uid___A002_X112077c_X3622c.ms.split.cal/']
 
 spwstring = ['']
 imtag = ['_tag_']          #0
 
 #If spectral lines: redshifted frequency of expected line to center the cube.
-linestring = ['linename']
-redfreq = [810.240778]  #
+linestring = ['CI1', 'CS10','HCN6','HCO6','CS11']
+redfreq = [134.4145,133.7563,145.2188,146.1310,147.1218]  #
 
+'''
+
+'''
 #===============================================================================================
 
 '''notes'''
@@ -93,6 +97,9 @@ def runAutoCleanCube(vn=['v1.ms','v2.ms'],specwindow='', lineID=0, fieldname = '
                 # Typically about the size of the primary beam (55" for SMA at 1.3mm), measured in
                 # number of pixels. Better if it is a power of 2, as it makes the FFT algorithm more efficient.
                 imsize = imsize_pix
+                phasecenter = 'J2000 08:46:49.5871 15:05:57.24'
+'
+                psfphasecenter='J2000 08:46:49.5871 15:05:57.24'
                 #Weighting of the visibilities before imaging. Natural gives larger beam, lowest noise (hence max SNR).
                 # Uniform gives smallest beam, highest noise. Briggs is something in between depending on robust parameter.
                 weighting = weightscheme
@@ -171,7 +178,7 @@ def runAutoCleanCube(vn=['v1.ms','v2.ms'],specwindow='', lineID=0, fieldname = '
                 tclean(vis=vn,
                         imagename=imagename,
                         field=fieldname,spw=specwindow,niter=niter, cycleniter=cycleniter,
-                        interactive=False,
+                        interactive=False,psfphasecenter=psfphasecenter,phasecenter=phasecenter,
                         usemask=usemask,noisethreshold=noisethreshold,verbose=verbose,fastnoise=fastnoise,
                         lownoisethreshold=lownoisethreshold,smoothfactor=smoothfactor,threshold=thresh,
                         cell=cell,
@@ -318,9 +325,13 @@ def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', s
 
 # LINE IMAGING EXAMPLE:
 
-#runAutoCleanCube(vn=cal_ms,specwindow='55,59,63,67', lineID=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.3,imsize_pix=256,robustfactor = 0.5, tag='_nocontsub_rob0p5_v20',startendvel=[-2000,1000],velres=20.0,outfolder = root+sourcenames[0]+'/natty/', deletefiles=True)
+#runAutoCleanCube(vn=cal_ms,specwindow='55,59,63,67', lineID=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.1,imsize_pix=256,robustfactor = 0.5, tag='_nocontsub_rob0p5_v20',startendvel=[-2000,1000],velres=20.0,outfolder = root+sourcenames[0]+'/natty/', deletefiles=True)
 
-getlistobs(uv_ms='/lustre/cv/observers/cv-14744/data/2023.1.00299.S_uid___A001_X3628_X184/2023.1.00299.S/science_goal.uid___A001_X3628_X182/group.uid___A001_X3628_X183/member.uid___A001_X3628_X184/calibrated/calibrated_final.ms', outfile='listobsMS_Band4_test_ new1.txt')
+runAutoCleanCube(vn=cal_ms_lowres,specwindow='25,27', lineID=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.9,imsize_pix=512,robustfactor = 0.5, tag='_nocontsub_rob0p5_v20',startendvel=[-1000,1000],velres=20.0,outfolder = root+sourcenames[0]+'/briggs0p5/', deletefiles=True)
+
+
+
+# getlistobs(uv_ms='/lustre/cv/observers/cv-14744/data/2023.1.00299.S_uid___A001_X3628_X184/2023.1.00299.S/science_goal.uid___A001_X3628_X182/group.uid___A001_X3628_X183/member.uid___A001_X3628_X184/calibrated/calibrated_final.ms', outfile='listobsMS_Band4_test_ new1.txt')
       
 
 #========================================================================================================================================
