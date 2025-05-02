@@ -16,7 +16,7 @@ parallel=False
 # get all MSs from directory
 
 # hires first
-vis_arr = [glob.glob("hires/MOUS/calibrated/working/*.ms.split.cal"), glob.glob("lores/MOUS/calibrated/working/*.ms.split.cal")]
+vis_arr = [glob.glob("hires/MOUS/calibrated/working/*targets.ms"), glob.glob("lores/MOUS/calibrated/working/*targets.ms")]
 ext_arr = ['.hires', '.lores']
 switch_arr = [1,1]
 
