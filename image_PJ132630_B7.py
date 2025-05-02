@@ -107,7 +107,7 @@ if 1:
 
     vis = vis_arr[0]
 
-    vises = [vis_arr[i] for i in range(len(vis_arr))]
+    vises = [vis_arr[i][0] for i in range(len(vis_arr))]
 
     # get properties from first vis
     # field
