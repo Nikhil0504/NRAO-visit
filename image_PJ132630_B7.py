@@ -107,6 +107,8 @@ if 1:
 
     vis = vis_arr[0]
 
+    vises = [vis_arr[i] for i in range(len(vis_arr))]
+
     # get properties from first vis
     # field
     msmd.open(vis[0])
@@ -119,7 +121,7 @@ if 1:
     spws=au.getScienceSpws(vis[0], intent='OBSERVE_TARGET#ON_SOURCE', returnString=False)
     spws=','.join(map(str, spws)) # need string later
 
-    commonpars=dict(vis=vis_arr,
+    commonpars=dict(vis=vises,
                     selectdata=True,
                     field=field,  # this is the source
                     imagename=imagename,
