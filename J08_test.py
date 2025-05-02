@@ -51,8 +51,17 @@ cal_ms_highres = [root+highrespath+'uid___A002_X10e6d25_X50ff.ms.split.cal/',
 cal_ms_lowres = [root+lowrespath+'uid___A002_X112077c_X3f163.ms.split.cal/',  
           root+lowrespath+'uid___A002_X112077c_X3622c.ms.split.cal/']
 
-spwstring = ['']
-imtag = ['_tag_']          #0
+cal_ms_high_low = [root+highrespath+'uid___A002_X10e6d25_X50ff.ms.split.cal/',  
+          root+highrespath+'uid___A002_X10e6d25_X5d65.ms.split.cal/',
+          root+highrespath+'uid___A002_X10e9b60_X68dc.ms.split.cal/',
+          root+highrespath+'uid___A002_X10e9b60_Xe6a1.ms.split.cal/',
+          root+lowrespath+'uid___A002_X112077c_X3f163.ms.split.cal/',  
+          root+lowrespath+'uid___A002_X112077c_X3622c.ms.split.cal/']
+
+
+
+spwstring = ['21','23','25','27']
+imtag = ['_Band4continuum_']          #0
 
 #If spectral lines: redshifted frequency of expected line to center the cube.
 linestring = ['CI1', 'CS10','HCN6','HCO6','CS11']
@@ -98,7 +107,6 @@ def runAutoCleanCube(vn=['v1.ms','v2.ms'],specwindow='', lineID=0, fieldname = '
                 # number of pixels. Better if it is a power of 2, as it makes the FFT algorithm more efficient.
                 imsize = imsize_pix
                 phasecenter = 'J2000 08:46:49.5871 15:05:57.24'
-'
                 psfphasecenter='J2000 08:46:49.5871 15:05:57.24'
                 #Weighting of the visibilities before imaging. Natural gives larger beam, lowest noise (hence max SNR).
                 # Uniform gives smallest beam, highest noise. Briggs is something in between depending on robust parameter.
@@ -153,8 +161,8 @@ def runAutoCleanCube(vn=['v1.ms','v2.ms'],specwindow='', lineID=0, fieldname = '
                 primbeamcorr = True
 
                 # Set global threshold for the residual image max in nsigma*rms to stop iterations
-                # nsigma = 1.5
-                # threshold='1.0mJy'
+                nsigma = 1.5
+                thresh='1.0mJy'
                 # Max number of minor cycle iterations per major cycle.
                 # Set to -1 initially to iteratively in interactive mode.
                 cycleniter = 100
@@ -178,10 +186,10 @@ def runAutoCleanCube(vn=['v1.ms','v2.ms'],specwindow='', lineID=0, fieldname = '
                 tclean(vis=vn,
                         imagename=imagename,
                         field=fieldname,spw=specwindow,niter=niter, cycleniter=cycleniter,
-                        interactive=False,psfphasecenter=psfphasecenter,phasecenter=phasecenter,
+                        interactive=False,#psfphasecenter=psfphasecenter,phasecenter=phasecenter,
                         usemask=usemask,noisethreshold=noisethreshold,verbose=verbose,fastnoise=fastnoise,
                         lownoisethreshold=lownoisethreshold,smoothfactor=smoothfactor,threshold=thresh,
-                        cell=cell,
+                        cell=cell, nsigma=nsigma,
                         imsize=imsize,
                         weighting=weighting,
                         robust=robust,
@@ -201,7 +209,7 @@ def runAutoCleanCube(vn=['v1.ms','v2.ms'],specwindow='', lineID=0, fieldname = '
         return 
 
 
-def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', sourcename='', synbeam=0.3,imsize_pix=256,weightscheme='briggs',robustfactor = 2.0, tag='taginfo',outfolder = 'root/sourcename/weightinginfo/', deletefiles=True): 
+def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', sourcename='', synbeam=0.3,imsize_pix=256,weightscheme='briggs',robustfactor = 2.0, tag='taginfo',thresh='3.0mJy',outfolder = 'root/sourcename/weightinginfo/', deletefiles=True): 
 
 
         ##IMPORTANT: PLEASE DEFINE 'IMTAG' ABOVE 
@@ -264,8 +272,8 @@ def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', s
                 primbeamcorr = True
 
                 # Set global threshold for the residual image max in nsigma*rms to stop iterations
-                nsigma = 2.5
-                threshold='1.0mJy'
+                # nsigma = 2.5
+                threshold=thresh
                 # Max number of minor cycle iterations per major cycle.
                 #
                 cycleniter = 100
@@ -327,8 +335,12 @@ def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', s
 
 #runAutoCleanCube(vn=cal_ms,specwindow='55,59,63,67', lineID=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.1,imsize_pix=256,robustfactor = 0.5, tag='_nocontsub_rob0p5_v20',startendvel=[-2000,1000],velres=20.0,outfolder = root+sourcenames[0]+'/natty/', deletefiles=True)
 
-runAutoCleanCube(vn=cal_ms_lowres,specwindow='25,27', lineID=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.9,imsize_pix=512,robustfactor = 0.5, tag='_nocontsub_rob0p5_v20',startendvel=[-1000,1000],velres=20.0,outfolder = root+sourcenames[0]+'/briggs0p5/', deletefiles=True)
+runAutoCleanCube(vn=cal_ms_lowres,specwindow='27', lineID=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.9,imsize_pix=512,robustfactor = 0.5, tag='_nocontsub_rob0p5_v40_tm2',startendvel=[-1500,1500],velres=40.0,outfolder = root+sourcenames[0]+'/briggs0p5/', thresh='0.3mJy',deletefiles=True)
 
+runAutoCleanCube(vn=cal_ms_highres,specwindow='27', lineID=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.1,imsize_pix=1024,robustfactor = 0.5, tag='_nocontsub_rob0p5_v40_tm1',startendvel=[-1500,1500],velres=40.0,outfolder = root+sourcenames[0]+'/briggs0p5/', thresh='0.3mJy',deletefiles=True)
+
+
+runAutoCleanCube(vn=cal_ms_high_low,specwindow='27', lineID=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.1,imsize_pix=1024,robustfactor = 0.5, tag='_nocontsub_rob0p5_v40_tm1_tm2',startendvel=[-1500,1500],velres=40.0,outfolder = root+sourcenames[0]+'/briggs0p5/', thresh='0.3mJy',deletefiles=True)
 
 
 # getlistobs(uv_ms='/lustre/cv/observers/cv-14744/data/2023.1.00299.S_uid___A001_X3628_X184/2023.1.00299.S/science_goal.uid___A001_X3628_X182/group.uid___A001_X3628_X183/member.uid___A001_X3628_X184/calibrated/calibrated_final.ms', outfile='listobsMS_Band4_test_ new1.txt')
@@ -345,3 +357,4 @@ runAutoCleanCube(vn=cal_ms_lowres,specwindow='25,27', lineID=0, fieldname = fiel
 
 #runAutoCleanCont(vn=cal_ms,specwindow='', im=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.3,imsize_pix=256, tag='_ALLSPWS_robust2',outfolder = root+sourcenames[0]+'/natty/', deletefiles=True)
 
+runAutoCleanCont(vn=cal_ms_lowres,specwindow='', im=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.3,imsize_pix=256,weightscheme='briggs',robustfactor = 2.0, tag='taginfo',thresh='3.0mJy',outfolder = 'root/sourcename/weightinginfo/', deletefiles=True)
