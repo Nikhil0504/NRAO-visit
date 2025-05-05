@@ -32,7 +32,7 @@ if InspectPLOTMS:
 
 
 
-# weighting='briggs',robust = 2.0, 
+# weighting='briggs',robust = 2.0,
 # weighting = 'natural'
 # gridder = 'standard'
 # gridder = 'mosaic',  psfphasecenter='',phasecenter=''
@@ -40,21 +40,33 @@ if InspectPLOTMS:
 # pbcorr=True,pblimit=0.2
 
 def runAutoCleanCube(vn=['/root/path/to/v1.ms','/root/path/to/v2.ms'],
-                     specwindow='', 
-                     linestring='CO', 
-                     redfreq=100.1,startendvel=[-2000,2000],velres=50.0, 
-                     thresh='1.0mJy', niter=100000, cycleniter = 100,
-                     fieldname = '', 
-                     synbeam_estimate=0.3,imsize_pix=256,
-                     noisethreshold = 5.0,lownoisethreshold = 1.5, sidelobethreshold=3.0,
-                     tag='taginfo',outfolder = 'root/sourcename/weightinginfo/',deletefiles=True, **kwargs):  
+                     specwindow='',
+                     linestring='CO',
+                     redfreq=100.1,
+                     startendvel=[-2000,2000],
+                     velres=50.0,
+                     thresh='1.0mJy',
+                     niter=100000,
+                     cycleniter = 100,
+                     fieldname = '',
+                     synbeam_estimate=0.3,
+                     imsize_pix=256,
+                     usemask='user',
+                     weighting='natural',
+                     deconvolver='hogbom',
+                     gridder='standard',
+                     tag='taginfo',
+                     outfolder = 'root/sourcename/weightinginfo/',
+                     deletefiles=True,
+                     **kwargs,
+                     ):
 
-       
+
 
         #roughly the median value between the major/minor axes:
-        cellsperbeam = 5.0 #at least less than 1/3 restoring beam 
+        cellsperbeam = 5.0 #at least less than 1/3 restoring beam
         cellsizeestimate= synbeam_estimate/cellsperbeam
-        cellsize = str(cellsizeestimate)+'arcsec' #e.g.# cellsize = '0.04arcsec' 
+        cellsize = str(cellsizeestimate)+'arcsec' #e.g.# cellsize = '0.04arcsec'
 
         if deletefiles:
                 os.system('rm -rf '+outfolder+'*'+'_cube_'+tag+'*')
@@ -102,15 +114,15 @@ def runAutoCleanCube(vn=['/root/path/to/v1.ms','/root/path/to/v2.ms'],
         # The standard clean methods assume the emission is a collection of point-sources,
         # which is a poor approximation when we have extended emission.
         #>
-        # deconvolver = 'hogbom' 
+        # deconvolver = 'hogbom'
         #>
-        # deconvolver = 'multiscale' 
+        # deconvolver = 'multiscale'
         # scales = [0,5,15,20]
 
-        #Auto-multithresh: 
+        #Auto-multithresh:
         # sidelobethreshold = 3.0 # (double=3.0) - sidelobethreshold * the max sidelobe level * peak residual
         # noisethreshold = 3.0 # (double=5.0) - noisethreshold * rms in residual image + location(median)
-        # lownoisethreshold = 1.5 # (double=1.5) - lownoisethreshold * rms in residual image + location(median)        
+        # lownoisethreshold = 1.5 # (double=1.5) - lownoisethreshold * rms in residual image + location(median)
         # negativethreshold (double=0.0) - negativethreshold * rms in residual image + location(median)
         # smoothfactor = 1.0 #(double=1.0) - smoothing factor in a unit of the beam
         # minbeamfrac (double=0.3) - minimum beam fraction for pruning
@@ -118,10 +130,9 @@ def runAutoCleanCube(vn=['/root/path/to/v1.ms','/root/path/to/v2.ms'],
         # growiterations (int=75) - number of binary dilation iterations for growing the mask
         # dogrowprune (bool=True) - Do pruning on the grow mask
         # minpercentchange (double=-1.0) - minimum percentage change in mask size (per channel plane) to trigger updating of mask by automask
-        verbose = True #(bool=False) - True: print more automasking information in the logger
-        usemask='auto-multithresh'
+        usemask=usemask
         fastnoise=True
-        
+
         #PRIMARY BEAM CORRECTION
         # primbeamcorr = True
         # pblimit = 0.2
@@ -131,11 +142,11 @@ def runAutoCleanCube(vn=['/root/path/to/v1.ms','/root/path/to/v2.ms'],
 
         # Set global threshold for the residual image max in nsigma*rms to stop iterations
         # nsigma = 1.5
-        # or: 
+        # or:
         # threshold='1.0mJy'
 
         # Max number of minor cycle (keep changing model) iterations per major cycle (fixed model determines residual checks etc).
-        # Set to -1 initially to iteratively in interactive mode. Smaller number = longer time. 
+        # Set to -1 initially to iteratively in interactive mode. Smaller number = longer time.
         # Used to determine minor cycle threshold. Factor multiplied by the maximum dirty beam
         # sidelobe level to calculate when to trigger major cycle.
         # cyclefactor = 1.0 #Default
@@ -150,54 +161,58 @@ def runAutoCleanCube(vn=['/root/path/to/v1.ms','/root/path/to/v2.ms'],
         calcpsf=True # These save some time to avoid recalculating saved products
         ##-----<><><><><><><><><><><><><><><><><><><><><><><><>
 
-        DOLINEIMAGING = True
-        if DOLINEIMAGING:
-                tclean(vis=vn,
-                        imagename=imagename,
-                        field=fieldname,
-                        spw=specwindow,
-                        niter=niter, 
-                        cycleniter=cycleniter,
-                        interactive=False,
-                        usemask=usemask,noisethreshold=noisethreshold,verbose=verbose,fastnoise=fastnoise,
-                        lownoisethreshold=lownoisethreshold,threshold=thresh,
-                        cell=cell,
-                        imsize=imsize,
-                        weighting=weighting,
-                        gridder=gridder,
-                        deconvolver=deconvolver,
-                        specmode=specmode,
-                        width=width,
-                        start=start,
-                        nchan=nchan,
-                        restfreq=restfreq,
-                        outframe=outframe,calcres=calcres, calcpsf=calcpsf                        )  
+        tclean(vis=vn,
+            field=fieldname,
+            spw=specwindow,
+            imagename=imagename,
+            imsize=imsize,
+            niter=niter,
+            cycleniter=cycleniter,
+            interactive=False,
+            verbose=True,
+            usemask=usemask,
+            fastnoise=fastnoise,
+            threshold=thresh,
+            cell=cell,
+            weighting=weighting,
+            gridder=gridder,
+            deconvolver=deconvolver,
+            specmode=specmode,
+            width=width,
+            start=start,
+            nchan=nchan,
+            restfreq=restfreq,
+            outframe=outframe,
+            calcres=calcres,
+            calcpsf=calcpsf,
+            **kwargs
+        )
 
         exportfits(imagename=imagename+'.image',fitsimage=imagename+'.fits')
         # exportfits(imagename=imagename+'.image.pbcor',fitsimage=imagename+'pbcor.fits')
 
-        return 
+        return
 
 
-def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', sourcename='', synbeam=0.3,imsize_pix=256,weightscheme='briggs',robustfactor = 2.0, tag='taginfo',outfolder = 'root/sourcename/weightinginfo/', deletefiles=True): 
+def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', sourcename='', synbeam=0.3,imsize_pix=256,weightscheme='briggs',robustfactor = 2.0, tag='taginfo',outfolder = 'root/sourcename/weightinginfo/', deletefiles=True):
 
 
-        ##IMPORTANT: PLEASE DEFINE 'IMTAG' ABOVE 
+        ##IMPORTANT: PLEASE DEFINE 'IMTAG' ABOVE
 
         #roughly the median value between the major/minor axes:
-        cellsperbeam = 5.0 #at least less than 1/3 restoring beam 
+        cellsperbeam = 5.0 #at least less than 1/3 restoring beam
         cellsizeestimate= synbeam/cellsperbeam
-        cellsize = str(cellsizeestimate)+'arcsec' #e.g.# cellsize = '0.04arcsec' 
+        cellsize = str(cellsizeestimate)+'arcsec' #e.g.# cellsize = '0.04arcsec'
 
         if deletefiles:
                 # os.system('rm -rf '+outfolder+sourcename+'_'+linestring[lineID]+'*cube_dirty*')
-                # os.system('rm -rf '+outfolder+sourcename+'*'+'_cube_'+tag+'*') 
+                # os.system('rm -rf '+outfolder+sourcename+'*'+'_cube_'+tag+'*')
                 os.system('rm -rf '+outfolder+'*'+'_cont_'+tag+'*')
 
 
         ContInput = True
         if ContInput:
-                # Change weighting/robust and imagename accordingly 
+                # Change weighting/robust and imagename accordingly
                 # File names
                 imagename = outfolder+sourcename+imtag[im]+'_cont_'+tag # Output images
                 # specwin=specwindow #
@@ -210,7 +225,7 @@ def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', s
                 # Needs to be a small fraction (<1/3) of expected beam size (few arcsec in this case).
                 cell = cellsize
                 # Typically about the size of the primary beam (55" for SMA at 1.3mm), measured in
-                # number of pixels. 
+                # number of pixels.
                 # Better if it is a power of 2, as it makes the FFT algorithm more efficient.
                 imsize = imsize_pix
                 #Weighting of the visibilities before imaging. Natural gives larger beam, lowest noise (hence max SNR).
@@ -224,7 +239,7 @@ def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', s
                 specmode = 'mfs'
 
                 gridder = 'standard'
-                deconvolver = 'hogbom' 
+                deconvolver = 'hogbom'
                 # pbmask (double=0.0) - primary beam mask
                 # sidelobethreshold (double=3.0) - sidelobethreshold * the max sidelobe level * peak residual
                 noisethreshold = 2.0 # (double=5.0) - noisethreshold * rms in residual image + location(median)
@@ -287,7 +302,7 @@ def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', s
 
         exportfits(imagename=imagename+'.image.pbcor',fitsimage=imagename+'.fits')
 
-        return 
+        return
 
 
 
@@ -317,9 +332,7 @@ runAutoCleanCube(vn=cal_ms,specwindow='55,59,63,67', lineID=0, fieldname = field
 #========================================================================================================================================
 #========================================================================================================================================
 
-### CONTINUUM: 
+### CONTINUUM:
 #NOTE: specwindow='' takes ALL spectral windows
 
 #runAutoCleanCont(vn=cal_ms,specwindow='', im=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.3,imsize_pix=256, tag='_ALLSPWS_robust2',outfolder = root+sourcenames[0]+'/natty/', deletefiles=True)
-
-
