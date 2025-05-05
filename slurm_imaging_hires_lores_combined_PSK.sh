@@ -12,4 +12,4 @@
 #SBATCH --mem=16G                             # Memory needed by the whole job.
 
 # casa's python requires a DISPLAY for matplot, so create a virtual X server
-xvfb-run -d casa --nogui -c /lustre/cv/observers/cv-7429/data/image_hires_lores_and_combined_PSK.py
+xvfb-run -d casa --nogui -c /lustre/cv/observers/cv-7429/data/NRAO-visit/image_hires_lores_and_combined_PSK.py
