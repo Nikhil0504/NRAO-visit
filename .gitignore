@@ -176,3 +176,4 @@ cython_debug/
 *.last
 *.pre
 TempLattice*
+*.out
