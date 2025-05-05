@@ -11,7 +11,7 @@
 #SBATCH --time=0-3:0:0                        # Expected runtime of 3 hours
 #SBATCH --mem=64G                             # Memory needed by the whole job.
 #SBATCH --nodes=1                             # Request 1 node
-#SBATCH --ntask-per-node=8					  # Request 8 cores
+#SBATCH --ntasks-per-node=8					  # Request 8 cores
 
 CASAPATH=/home/casa/packages/RHEL7/release/current # Use a specific version of CASA
 xvfb-run -d ${CASAPATH}/bin/mpicasa ${CASAPATH}/bin/casa --nogui -c /lustre/cv/observers/cv-7429/data/NRAO-visit/image_hires_lores_and_combined_PSK.py
