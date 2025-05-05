@@ -10,7 +10,7 @@ import analysisUtils as au
 
 
 # IF RUN WITH MPI SET TRUE:
-parallel=False
+parallel=True
 
 # get all MSs from directory
 
