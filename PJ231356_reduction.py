@@ -110,13 +110,13 @@ def runAutoCleanCube(vn=['v1.ms','v2.ms'],
                 # The standard clean methods assume the emission is a collection of point-sources,
                 # which is a poor approximation when we have extended emission.
                 deconvolver = 'multiscale'
-                scales = [0, 5, 15, 20]
+                scales = [0, 5, 15, 20, 40, 60, 80]
                 # pbmask (double=0.0) - primary beam mask
                 # sidelobethreshold (double=3.0) - sidelobethreshold * the max sidelobe level * peak residual
                 noisethreshold = 2.0 # (double=5.0) - noisethreshold * rms in residual image + location(median)
-                lownoisethreshold = 1.25 # (double=1.5) - lownoisethreshold * rms in residual image + location(median)
+                lownoisethreshold = 1. # (double=1.5) - lownoisethreshold * rms in residual image + location(median)
                 # negativethreshold (double=0.0) - negativethreshold * rms in residual image + location(median)
-                smoothfactor = 1.0 #(double=1.0) - smoothing factor in a unit of the beam
+                smoothfactor = 2.0 #(double=1.0) - smoothing factor in a unit of the beam
                 minbeamfrac = 0.2 #(double=0.3) - minimum beam fraction for pruning
                 # cutthreshold (double=0.01) - threshold to cut the smoothed mask to create a final mask
                 # growiterations (int=75) - number of binary dilation iterations for growing the mask
@@ -132,7 +132,7 @@ def runAutoCleanCube(vn=['v1.ms','v2.ms'],
                 # threshold='1.0mJy'
                 # Max number of minor cycle iterations per major cycle.
                 # Set to -1 initially to iteratively in interactive mode.
-                cycleniter = 50 
+                cycleniter = 100 
                 # Used to determine minor cycle threshold. Factor multiplied by the maximum dirty beam
                 # sidelobe level to calculate when to trigger major cycle.
                 cyclefactor = 1.0 #Default
@@ -314,7 +314,7 @@ fieldnames = ['PJ231356.6']
 cal_ms = [root + 'calibrated_final_highres.ms',  root + 'calibrated_final_lowres.ms']
 
 spwstring = ['23']
-imtag = ['autoclean_v1']          #0
+imtag = ['autoclean_v3_bigger_scales_low_threshold']          #0
 
 #If spectral lines: redshifted frequency of expected line to center the cube.
 linestring = ['CO3']
@@ -334,7 +334,7 @@ runAutoCleanCube(vn=cal_ms,
     velres=100., 
     outfolder = root,
     deletefiles=True,
-    thresh='0.1mJy'
+    thresh='0.13mJy'
 )
 
 
