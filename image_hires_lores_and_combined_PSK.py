@@ -202,10 +202,10 @@ def image_combined_res(targ, band):
 #image_combined_res(targ='PJ132217', band='B7')
 
 
-image_high_and_lo_res(targ='PJ231356', band='B6', hi_lo_res_switch = [1,1])
+#image_high_and_lo_res(targ='PJ231356', band='B6', hi_lo_res_switch = [1,1])
 image_high_and_lo_res(targ='PJ231356', band='B7', hi_lo_res_switch = [1,1])
 
-image_combined_res(targ='PJ231356', band='B6')
+#image_combined_res(targ='PJ231356', band='B6')
 image_combined_res(targ='PJ231356', band='B7')
 
 
