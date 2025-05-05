@@ -99,7 +99,7 @@ def runAutoCleanCube(vn=['v1.ms','v2.ms'],specwindow='', lineID=0, grid='standar
                 restfreq = str(redfreq[lineID])+'GHz' #Rest frequency of line of interest.
                 interactive = False
                 # Number of iterations before stopping deconvolution (global stopping criterion).
-                niter = 1000000
+                niter = 0
                 #Pixel size of image in arcsec.
                 # Needs to be a small fraction (<1/3) of expected beam size (few arcsec in this case).
                 cell = cellsize
@@ -339,7 +339,17 @@ def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', s
 
 #runAutoCleanCube(vn=cal_ms,specwindow='55,59,63,67', lineID=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.1,imsize_pix=256,robustfactor = 0.5, tag='_nocontsub_rob0p5_v20',startendvel=[-2000,1000],velres=20.0,outfolder = root+sourcenames[0]+'/natty/', deletefiles=True)
 
-runAutoCleanCube(vn=cal_ms_lowres,specwindow='27', lineID=0, grid='mosaic',fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.9,imsize_pix=800,robustfactor = 0.5, tag='_nocontsub_rob0p5_v20_tm2',startendvel=[-1500,1500],velres=20.0,outfolder = root+sourcenames[0]+'/briggs0p5/', thresh='0.3mJy',deletefiles=True)
+#band4_TM2_CI_cube
+#runAutoCleanCube(vn=cal_ms_lowres,specwindow='27', lineID=0, grid='mosaic',fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.9,imsize_pix=800,robustfactor = 0.5, tag='_nocontsub_rob0p5_v20_tm2',startendvel=[-1500,1500],velres=20.0,outfolder = root+sourcenames[0]+'/briggs0p5/', thresh='0.3mJy',deletefiles=True)
+
+
+#band4_TM1_CI_cube
+# runAutoCleanCube(vn=cal_ms_highres,specwindow='27', lineID=0, grid='mosaic',fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.1,imsize_pix=1024,robustfactor = 0.5, tag='_nocontsub_rob0p5_v20_tm1_dirty_2',startendvel=[-1500,1500],velres=20.0,outfolder = root+sourcenames[0]+'/briggs0p5/', thresh='0.3mJy',deletefiles=True)
+
+
+#band4_TM1_and_TM2_CI_cube
+runAutoCleanCube(vn=cal_ms_high_low,specwindow='27', lineID=0, grid='mosaic',fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.1,imsize_pix=1024,robustfactor = 0.5, tag='_nocontsub_rob0p5_v20_tm1_tm2',startendvel=[-1500,1500],velres=20.0,outfolder = root+sourcenames[0]+'/briggs0p5/', thresh='0.3mJy',deletefiles=True)
+
 
 # runAutoCleanCube(vn=cal_ms_highres,specwindow='27', lineID=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.1,imsize_pix=1024,robustfactor = 0.5, tag='_nocontsub_rob0p5_v40_tm1',startendvel=[-1500,1500],velres=40.0,outfolder = root+sourcenames[0]+'/briggs0p5/', thresh='0.3mJy',deletefiles=True)
 

@@ -12,4 +12,4 @@
 
 # casa's python requires a DISPLAY for matplot, so create a virtual X server 
 
-xvfb-run -d casa-alma --pipeline --nogui -c /lustre/cv/observers/cv-14744/data/NRAO-visit/J08_test.py
+xvfb-run -d nice mpicasa -n 16 casa-alma --pipeline --nogui -c /lustre/cv/observers/cv-14744/data/NRAO-visit/J08_test.py
