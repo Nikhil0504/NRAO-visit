@@ -178,115 +178,115 @@ def runAutoCleanCube(vn=['v1.ms','v2.ms'],
         return 
 
 
-# def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', sourcename='', synbeam=0.3,imsize_pix=256,weightscheme='briggs',robustfactor = 2.0, tag='taginfo',outfolder = 'root/sourcename/weightinginfo/', deletefiles=True): 
+def runAutoCleanCont(vn=['v1.ms','v2.ms'],specwindow='', im=0, fieldname = '', sourcename='', synbeam=0.3,imsize_pix=256,weightscheme='briggs',robustfactor = 2.0, tag='taginfo',outfolder = 'root/sourcename/weightinginfo/', deletefiles=True): 
 
 
-#         ##IMPORTANT: PLEASE DEFINE 'IMTAG' ABOVE 
+        ##IMPORTANT: PLEASE DEFINE 'IMTAG' ABOVE 
 
-#         #roughly the median value between the major/minor axes:
-#         cellsperbeam = 5.0 #at least less than 1/3 restoring beam 
-#         cellsizeestimate= synbeam/cellsperbeam
-#         cellsize = str(cellsizeestimate)+'arcsec' #e.g.# cellsize = '0.04arcsec' 
+        #roughly the median value between the major/minor axes:
+        cellsperbeam = 5.0 #at least less than 1/3 restoring beam 
+        cellsizeestimate= synbeam/cellsperbeam
+        cellsize = str(cellsizeestimate)+'arcsec' #e.g.# cellsize = '0.04arcsec' 
 
-#         if deletefiles:
-#                 # os.system('rm -rf '+outfolder+sourcename+'_'+linestring[lineID]+'*cube_dirty*')
-#                 # os.system('rm -rf '+outfolder+sourcename+'*'+'_cube_'+tag+'*') 
-#                 os.system('rm -rf '+outfolder+'*'+'_cont_'+tag+'*')
+        if deletefiles:
+                # os.system('rm -rf '+outfolder+sourcename+'_'+linestring[lineID]+'*cube_dirty*')
+                # os.system('rm -rf '+outfolder+sourcename+'*'+'_cube_'+tag+'*') 
+                os.system('rm -rf '+outfolder+'*'+'_cont_'+tag+'*')
 
 
-#         ContInput = True
-#         if ContInput:
-#                 # Change weighting/robust and imagename accordingly 
-#                 # File names
-#                 imagename = outfolder+sourcename+imtag[im]+'_cont_'+tag # Output images
-#                 # specwin=specwindow #
-#                 # Imaging parameters
-#                 #Shows residual image and waits after every major cycle iteration.
-#                 interactive = False
-#                 # Number of iterations before stopping deconvolution (global stopping criterion).
-#                 niter = 1000000
-#                 #Pixel size of image in arcsec.
-#                 # Needs to be a small fraction (<1/3) of expected beam size (few arcsec in this case).
-#                 cell = cellsize
-#                 # Typically about the size of the primary beam (55" for SMA at 1.3mm), measured in
-#                 # number of pixels. 
-#                 # Better if it is a power of 2, as it makes the FFT algorithm more efficient.
-#                 imsize = imsize_pix
-#                 #Weighting of the visibilities before imaging. Natural gives larger beam, lowest noise (hence max SNR).
-#                 # Uniform gives smallest beam, highest noise. Briggs is something in between depending on robust parameter.
-#                 weighting = weightscheme
-#                 if weightscheme == 'briggs':
-#                         robust=robustfactor
-#                 elif weightscheme == 'natural' or weightscheme == 'uniform':
-#                         robust = ''
+        ContInput = True
+        if ContInput:
+                # Change weighting/robust and imagename accordingly 
+                # File names
+                imagename = outfolder+sourcename+imtag[im]+'_cont_'+tag # Output images
+                # specwin=specwindow #
+                # Imaging parameters
+                #Shows residual image and waits after every major cycle iteration.
+                interactive = False
+                # Number of iterations before stopping deconvolution (global stopping criterion).
+                niter = 1000000
+                #Pixel size of image in arcsec.
+                # Needs to be a small fraction (<1/3) of expected beam size (few arcsec in this case).
+                cell = cellsize
+                # Typically about the size of the primary beam (55" for SMA at 1.3mm), measured in
+                # number of pixels. 
+                # Better if it is a power of 2, as it makes the FFT algorithm more efficient.
+                imsize = imsize_pix
+                #Weighting of the visibilities before imaging. Natural gives larger beam, lowest noise (hence max SNR).
+                # Uniform gives smallest beam, highest noise. Briggs is something in between depending on robust parameter.
+                weighting = weightscheme
+                if weightscheme == 'briggs':
+                        robust=robustfactor
+                elif weightscheme == 'natural' or weightscheme == 'uniform':
+                        robust = ''
 
-#                 specmode = 'mfs'
+                specmode = 'mfs'
 
-#                 gridder = 'standard'
-#                 deconvolver = 'hogbom' 
-#                 # pbmask (double=0.0) - primary beam mask
-#                 # sidelobethreshold (double=3.0) - sidelobethreshold * the max sidelobe level * peak residual
-#                 noisethreshold = 2.0 # (double=5.0) - noisethreshold * rms in residual image + location(median)
-#                 lownoisethreshold = 1.5 # (double=1.5) - lownoisethreshold * rms in residual image + location(median)
-#                 # negativethreshold (double=0.0) - negativethreshold * rms in residual image + location(median)
-#                 smoothfactor = 1.0 #(double=1.0) - smoothing factor in a unit of the beam
-#                 # minbeamfrac (double=0.3) - minimum beam fraction for pruning
-#                 # cutthreshold (double=0.01) - threshold to cut the smoothed mask to create a final mask
-#                 # growiterations (int=75) - number of binary dilation iterations for growing the mask
-#                 # dogrowprune (bool=True) - Do pruning on the grow mask
-#                 # minpercentchange (double=-1.0) - minimum percentage change in mask size (per channel plane) to trigger updating of mask by automask
-#                 verbose = True #(bool=False) - True: print more automasking information in the logger
-#                 usemask='auto-multithresh'
-#                 fastnoise=True
-#                 primbeamcorr = True
+                gridder = 'standard'
+                deconvolver = 'hogbom' 
+                # pbmask (double=0.0) - primary beam mask
+                # sidelobethreshold (double=3.0) - sidelobethreshold * the max sidelobe level * peak residual
+                noisethreshold = 2.0 # (double=5.0) - noisethreshold * rms in residual image + location(median)
+                lownoisethreshold = 1.5 # (double=1.5) - lownoisethreshold * rms in residual image + location(median)
+                # negativethreshold (double=0.0) - negativethreshold * rms in residual image + location(median)
+                smoothfactor = 1.0 #(double=1.0) - smoothing factor in a unit of the beam
+                # minbeamfrac (double=0.3) - minimum beam fraction for pruning
+                # cutthreshold (double=0.01) - threshold to cut the smoothed mask to create a final mask
+                # growiterations (int=75) - number of binary dilation iterations for growing the mask
+                # dogrowprune (bool=True) - Do pruning on the grow mask
+                # minpercentchange (double=-1.0) - minimum percentage change in mask size (per channel plane) to trigger updating of mask by automask
+                verbose = True #(bool=False) - True: print more automasking information in the logger
+                usemask='auto-multithresh'
+                fastnoise=True
+                primbeamcorr = True
 
-#                 # Set global threshold for the residual image max in nsigma*rms to stop iterations
-#                 nsigma = 2.5
-#                 threshold='1.0mJy'
-#                 # Max number of minor cycle iterations per major cycle.
-#                 #
-#                 cycleniter = 100
-#                 # Used to determine minor cycle threshold. Factor multiplied by the maximum dirty beam
-#                 # sidelobe level to calculate when to trigger major cycle.
-#                 cyclefactor = 1.0 #Default
-#                 # Used to determine minor cycle threshold. If max dirty beam sidelobe level is less than
-#                 # this, use 5% as a threshold to trigger major cycle. Lower boundary for major cycle trigger.
-#                 minpsffraction = 0.05 #Default
-#                 # Used to determine minor cycle threshold. If max dirty beam sidelobe level is more than this,
-#                 # use 80% as a threshold to trigger major cycle. Upper boundary for major cycle trigger.
-#                 maxpsffraction = 0.8 #Default
-#                 # The primary beam size is set by the antenna size (7 m for SMA antennas).
-#                 # Roughly speaking, the noise level goes as 1 / pb decreasing radially outward.
-#                 # pblimit = 0.25
-#                 # mask = '....crtf'
-#                 ##-----<><><><><><><><><><><><><><><><><><><><><><><><>
+                # Set global threshold for the residual image max in nsigma*rms to stop iterations
+                nsigma = 2.5
+                threshold='1.0mJy'
+                # Max number of minor cycle iterations per major cycle.
+                #
+                cycleniter = 100
+                # Used to determine minor cycle threshold. Factor multiplied by the maximum dirty beam
+                # sidelobe level to calculate when to trigger major cycle.
+                cyclefactor = 1.0 #Default
+                # Used to determine minor cycle threshold. If max dirty beam sidelobe level is less than
+                # this, use 5% as a threshold to trigger major cycle. Lower boundary for major cycle trigger.
+                minpsffraction = 0.05 #Default
+                # Used to determine minor cycle threshold. If max dirty beam sidelobe level is more than this,
+                # use 80% as a threshold to trigger major cycle. Upper boundary for major cycle trigger.
+                maxpsffraction = 0.8 #Default
+                # The primary beam size is set by the antenna size (7 m for SMA antennas).
+                # Roughly speaking, the noise level goes as 1 / pb decreasing radially outward.
+                # pblimit = 0.25
+                # mask = '....crtf'
+                ##-----<><><><><><><><><><><><><><><><><><><><><><><><>
 
-#         DOCONTIMAGING = True
-#         if DOCONTIMAGING:
-#                 tclean(vis=vn,
-#                         imagename=imagename,
-#                         field=fieldname,spw=specwindow,niter=niter, cycleniter=cycleniter,threshold=threshold,
-#                         interactive=False,
-#                         usemask=usemask,noisethreshold=noisethreshold,verbose=verbose,fastnoise=fastnoise,
-#                         lownoisethreshold=lownoisethreshold,smoothfactor=smoothfactor,
-#                         cell=cell,
-#                         imsize=imsize,
-#                         weighting=weighting,
-#                         robust=robust,
-#                         gridder=gridder,
-#                         deconvolver=deconvolver,
-#                         specmode=specmode,
-#                         # width=width,
-#                         # start=start, nsigma=nsigma,
-#                         # nchan=nchan,
-#                         # restfreq=restfreq,outframe=outframe,
-#                         pbcor=primbeamcorr,
-#                         calcres=True, calcpsf=True  # These save some time to avoid recalculating saved products
-#                         )
+        DOCONTIMAGING = True
+        if DOCONTIMAGING:
+                tclean(vis=vn,
+                        imagename=imagename,
+                        field=fieldname,spw=specwindow,niter=niter, cycleniter=cycleniter,threshold=threshold,
+                        interactive=False,
+                        usemask=usemask,noisethreshold=noisethreshold,verbose=verbose,fastnoise=fastnoise,
+                        lownoisethreshold=lownoisethreshold,smoothfactor=smoothfactor,
+                        cell=cell,
+                        imsize=imsize,
+                        weighting=weighting,
+                        robust=robust,
+                        gridder=gridder,
+                        deconvolver=deconvolver,
+                        specmode=specmode,
+                        # width=width,
+                        # start=start, nsigma=nsigma,
+                        # nchan=nchan,
+                        # restfreq=restfreq,outframe=outframe,
+                        pbcor=primbeamcorr,
+                        calcres=True, calcpsf=True  # These save some time to avoid recalculating saved products
+                        )
 
-#         exportfits(imagename=imagename+'.image.pbcor',fitsimage=imagename+'.fits')
+        exportfits(imagename=imagename+'.image.pbcor',fitsimage=imagename+'.fits')
 
-#         return 
+        return 
 
 
 
@@ -320,22 +320,22 @@ imtag = ['autoclean_v3_bigger_scales_low_threshold']          #0
 linestring = ['CO3']
 redfreq = [107.5664]  #
 
-runAutoCleanCube(vn=cal_ms,
-    specwindow=spwstring[0],
-    weightscheme='natural',
-    lineID=0, 
-    fieldname = fieldnames[0], 
-    sourcename=sourcenames[0], 
-    synbeam=0.1, 
-    imsize_pix=2048, 
-    robustfactor = 0.5, 
-    tag=imtag[0], 
-    startendvel=[-1000,1000],
-    velres=100., 
-    outfolder = root,
-    deletefiles=True,
-    thresh='0.13mJy'
-)
+# runAutoCleanCube(vn=cal_ms,
+#     specwindow=spwstring[0],
+#     weightscheme='natural',
+#     lineID=0, 
+#     fieldname = fieldnames[0], 
+#     sourcename=sourcenames[0], 
+#     synbeam=0.1, 
+#     imsize_pix=2048, 
+#     robustfactor = 0.5, 
+#     tag=imtag[0], 
+#     startendvel=[-1000,1000],
+#     velres=100., 
+#     outfolder = root,
+#     deletefiles=True,
+#     thresh='0.13mJy'
+# )
 
 
 #========================================================================================================================================
@@ -346,7 +346,18 @@ runAutoCleanCube(vn=cal_ms,
 
 ### CONTINUUM: 
 #NOTE: specwindow='' takes ALL spectral windows
-
-#runAutoCleanCont(vn=cal_ms,specwindow='', im=0, fieldname = fieldnames[0], sourcename=sourcenames[0], synbeam=0.3,imsize_pix=256, tag='_ALLSPWS_robust2',outfolder = root+sourcenames[0]+'/natty/', deletefiles=True)
+imtag = ['cube_v1']
+runAutoCleanCont(vn=cal_ms,
+    specwindow='25,27', 
+    im=0, 
+    fieldname = fieldnames[0], 
+    sourcename=sourcenames[0], 
+    synbeam=0.3, 
+    imsize_pix=2048, 
+    tag='_SPWS25_27_robust0_5', 
+    robustfactor=0.5,
+    outfolder = root, 
+    deletefiles=True
+)
 
 

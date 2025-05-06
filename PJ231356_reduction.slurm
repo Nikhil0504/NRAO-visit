@@ -11,4 +11,4 @@
 echo "Starting job"
 
 CASAPATH=/home/casa/packages/RHEL7/release/current # Use a specific version of CASA
-xvfb-run -d ${CASAPATH}/bin/mpicasa ${CASAPATH}/bin/casa --nogui -c PJ231356_reduction_B3.py
+xvfb-run -d ${CASAPATH}/bin/mpicasa ${CASAPATH}/bin/casa --nogui -c PJ231356_reduction.py
