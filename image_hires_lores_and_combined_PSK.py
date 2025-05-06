@@ -21,7 +21,7 @@ bands = ['B6', 'B7']
 
 
 
-def image_high_and_lo_res(targ, band, hi_lo_res_switch):
+def image_high_and_lo_res(targ, band, hi_lo_res_switch, fieldnum):
 
     # hires ordered first
     vis_arr = [glob.glob(targ+'/'+band+"/hires/MOUS/calibrated/working/*targets.ms"), glob.glob(targ+'/'+band+"/lores/MOUS/calibrated/working/*targets.ms")]
@@ -40,7 +40,7 @@ def image_high_and_lo_res(targ, band, hi_lo_res_switch):
             # get properties from first vis
             # field
             msmd.open(vis[0])
-            field=str(msmd.fieldsforintent("OBSERVE_TARGET#ON_SOURCE", True)[0])
+            field=str(msmd.fieldsforintent("OBSERVE_TARGET#ON_SOURCE", True)[fieldnum])
             msmd.close()
 
 
@@ -106,7 +106,7 @@ def image_high_and_lo_res(targ, band, hi_lo_res_switch):
 
 
 
-def image_combined_res(targ, band):
+def image_combined_res(targ, band, fieldnum):
 
 
     # hires ordered first
@@ -127,7 +127,7 @@ def image_combined_res(targ, band):
     # get properties from first vis
     # field
     msmd.open(vis[0])
-    field=str(msmd.fieldsforintent("OBSERVE_TARGET#ON_SOURCE", True)[0])
+    field=str(msmd.fieldsforintent("OBSERVE_TARGET#ON_SOURCE", True)[fieldnum])
     msmd.close()
 
 
@@ -203,10 +203,30 @@ def image_combined_res(targ, band):
 
 
 #image_high_and_lo_res(targ='PJ231356', band='B6', hi_lo_res_switch = [1,1])
-image_high_and_lo_res(targ='PJ231356', band='B7', hi_lo_res_switch = [1,1])
+#image_high_and_lo_res(targ='PJ231356', band='B7', hi_lo_res_switch = [1,1])
 
 #image_combined_res(targ='PJ231356', band='B6')
-image_combined_res(targ='PJ231356', band='B7')
+#image_combined_res(targ='PJ231356', band='B7')
 
+
+
+# PJ132934
+image_high_and_lo_res(targ='PJ132934', band='B6', hi_lo_res_switch = [1,1], fieldnum = 0)
+# PJ132935
+#image_high_and_lo_res(targ='PJ132934', band='B6', hi_lo_res_switch = [1,1], fieldnum = 1)
+
+
+# PJ132934
+image_high_and_lo_res(targ='PJ132934', band='B7', hi_lo_res_switch = [1,1], fieldnum = 0)
+# PJ132935
+#image_high_and_lo_res(targ='PJ132934', band='B7', hi_lo_res_switch = [1,1], fieldnum = 1)
+
+
+image_combined_res(targ='PJ132934', band='B6', fieldnum=0)
+image_combined_res(targ='PJ132934', band='B7', fieldnum=0)
+
+
+# PJ132935
+#image_combined_res(targ='PJ132934', band='B6', fieldnum=1)
 
 
